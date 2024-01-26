@@ -1,0 +1,14 @@
+flask
+Flask
+render_template
+request
+jsonify
+joblib
+librosa
+numpy as np
+sounddevice as sd
+os
+io
+wave
+shutil
+soundfile as sf
