@@ -5,8 +5,8 @@ request
 jsonify
 joblib
 librosa
-numpy as np
-sounddevice as sd
+numpy
+sounddevice
 os
 Gunicorn
 wave
