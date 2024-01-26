@@ -2,7 +2,7 @@ flask
 joblib
 librosa
 numpy
-sounddevice
+sounddevice==0.4.6
 os
 Gunicorn
 wave
