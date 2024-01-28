@@ -11,6 +11,7 @@ st.run("sudo apt-get install -y portaudio19-dev")
 
 # Install sounddevice
 st.run("pip install sounddevice")
+st.run("pip install pyaudio librosa numpy")
 
 # Load the trained model
 model = joblib.load("voice_model.pkl")
