@@ -1,6 +1,6 @@
 streamlit
+sounddevice
 scikit-learn
 joblib
 librosa
 numpy
-sounddevice
