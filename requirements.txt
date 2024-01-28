@@ -2,5 +2,6 @@ streamlit
 sounddevice
 scikit-learn
 joblib
+PyAudio
 librosa
 numpy
