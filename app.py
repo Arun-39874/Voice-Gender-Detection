@@ -5,6 +5,13 @@ import librosa
 import numpy as np
 import sounddevice as sd
 
+# Install PortAudio (for Debian-based systems, adjust based on your platform)
+st.run("sudo apt-get update")
+st.run("sudo apt-get install -y portaudio19-dev")
+
+# Install sounddevice
+st.run("pip install sounddevice")
+
 # Load the trained model
 model = joblib.load("voice_model.pkl")
 
