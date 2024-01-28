@@ -5,7 +5,6 @@ import joblib
 import librosa
 import numpy as np
 
-
 # Load the trained model
 model = joblib.load("voice_model.pkl")
 
