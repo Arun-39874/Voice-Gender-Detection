@@ -1,0 +1,10 @@
+flask
+joblib
+librosa
+numpy
+sounddevice==0.4.6
+os
+Gunicorn
+wave
+shutil
+
