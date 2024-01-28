@@ -1,9 +1,9 @@
 import streamlit as st
-import pyaudio
+import numpy as np
+import soundfile as sf
 from sklearn.model_selection import train_test_split
 import joblib
 import librosa
-import numpy as np
 
 # Load the trained model
 model = joblib.load("voice_model.pkl")
@@ -42,32 +42,12 @@ if input_option == "Live":
     if start_recording:
         st.info("Recording 5 seconds of audio. Speak now...")
 
-        # Set up audio recording parameters using pyaudio
-        FORMAT = pyaudio.paInt16
-        CHANNELS = 1
-        RATE = 44100
-        CHUNK = 1024
-        RECORD_SECONDS = 5
+        # Set up audio recording parameters
+        duration = 5  # seconds
+        fs = 44100  # sample rate
+        audio_data = st.audio_recorder(duration=duration, sample_rate=fs, channels=1)
 
-        p = pyaudio.PyAudio()
-
-        stream = p.open(format=FORMAT,
-                        channels=CHANNELS,
-                        rate=RATE,
-                        input=True,
-                        frames_per_buffer=CHUNK)
-
-        frames = []
-
-        for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-            data = stream.read(CHUNK)
-            frames.append(data)
-
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
-
-        audio_data = np.frombuffer(b''.join(frames), dtype=np.int16)
+        st.audio(audio_data, format="audio/wav")  # Display the recorded audio (optional)
 
         # Perform prediction
         predicted_gender = predict_gender(model, audio_data)
@@ -87,8 +67,8 @@ elif input_option == "File":
     uploaded_file = st.file_uploader("Upload an audio file", type=["wav"])
 
     if uploaded_file is not None:
-        # Use librosa to load the audio content directly
-        audio_data, _ = librosa.load(uploaded_file, sr=None)
+        # Use soundfile to load the audio content directly
+        audio_data, fs = sf.read(uploaded_file)
 
         # Perform prediction
         predicted_gender = predict_gender(model, audio_data)
