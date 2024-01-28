@@ -1,17 +1,10 @@
 import streamlit as st
+import pyaudio
 from sklearn.model_selection import train_test_split
 import joblib
 import librosa
 import numpy as np
-import sounddevice as sd
 
-# Install PortAudio (for Debian-based systems, adjust based on your platform)
-st.run("sudo apt-get update")
-st.run("sudo apt-get install -y portaudio19-dev")
-
-# Install sounddevice
-st.run("pip install sounddevice")
-st.run("pip install pyaudio librosa numpy")
 
 # Load the trained model
 model = joblib.load("voice_model.pkl")
@@ -49,9 +42,33 @@ if input_option == "Live":
 
     if start_recording:
         st.info("Recording 5 seconds of audio. Speak now...")
-        audio_data = sd.rec(int(5 * 44100), samplerate=44100, channels=1, dtype=np.int16)
-        sd.wait()
-        audio_data = audio_data.flatten()
+
+        # Set up audio recording parameters using pyaudio
+        FORMAT = pyaudio.paInt16
+        CHANNELS = 1
+        RATE = 44100
+        CHUNK = 1024
+        RECORD_SECONDS = 5
+
+        p = pyaudio.PyAudio()
+
+        stream = p.open(format=FORMAT,
+                        channels=CHANNELS,
+                        rate=RATE,
+                        input=True,
+                        frames_per_buffer=CHUNK)
+
+        frames = []
+
+        for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+            data = stream.read(CHUNK)
+            frames.append(data)
+
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+
+        audio_data = np.frombuffer(b''.join(frames), dtype=np.int16)
 
         # Perform prediction
         predicted_gender = predict_gender(model, audio_data)
