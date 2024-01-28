@@ -1,13 +1,9 @@
 import streamlit as st
-import pandas as pd
-from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
 import joblib
 import librosa
 import numpy as np
 import sounddevice as sd
-from io import BytesIO
 
 # Load the trained model
 model = joblib.load("voice_model.pkl")
